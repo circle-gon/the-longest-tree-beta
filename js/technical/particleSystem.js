@@ -1,10 +1,10 @@
-var particles = {};
-var particleID = 0;
-var mouseX = 0;
-var mouseY = 0;
+const particles = {};
+let particleID = 0;
+let mouseX = 0;
+let mouseY = 0;
 
-function makeParticles(data, amount=1, type = "normal") {
-    for (let x = 0; x < amount; x++) {
+function makeParticles(data, amount = 1, type = "normal") {
+    for (let i = 0; x < amount; x++) {
         let particle = newParticles[type]()
         for (thing in data) {
 

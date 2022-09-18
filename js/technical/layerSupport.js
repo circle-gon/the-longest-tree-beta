@@ -22,7 +22,7 @@ function updateHotkeys() {
   for (const layer in layers){
     const hk = layers[layer].hotkeys
     if (!hk) continue
-    for (id in hk){
+    for (const id in hk) {
 		  hotkeys[hk[id].key] = hk[id]
       hotkeys[hk[id].key].layer = layer
       hotkeys[hk[id].key].id = id
@@ -59,7 +59,7 @@ function updateLayers(){
     updateHotkeys()
 }
 
-function setupLayer(layer){
+function setupLayer(layer) {
     layers[layer].layer = layer
     if (layers[layer].upgrades){
         setRowCol(layers[layer].upgrades)
@@ -167,13 +167,13 @@ function setupLayer(layer){
 
     }
     if (layers[layer].startData) {
-        data = layers[layer].startData()
+        const data = layers[layer].startData()
         if (data.best !== undefined && data.showBest === undefined) layers[layer].showBest = true
         if (data.total !== undefined && data.showTotal === undefined) layers[layer].showTotal = true
     }
 
     if(!layers[layer].componentStyles) layers[layer].componentStyles = {}
-    if(layers[layer].symbol === undefined) layers[layer].symbol = layer.charAt(0).toUpperCase() + layer.slice(1)
+    if(layers[layer].symbol === undefined) layers[layer].symbol = layer[0].toUpperCase() + layer.slice(1)
     if(layers[layer].unlockOrder === undefined) layers[layer].unlockOrder = []
     if(layers[layer].gainMult === undefined) layers[layer].gainMult = decimalOne
     if(layers[layer].gainExp === undefined) layers[layer].gainExp = decimalOne
@@ -237,11 +237,9 @@ function addNode(layerName, layerData){ // Does the same thing, but for non-laye
 }
 
 // If data is a function, return the result of calling it. Otherwise, return the data.
-function readData(data, args = null){
-	if ((!!data && data.constructor && data.call && data.apply))
-		return data(args);
-	else
-		return data;
+function readData(data, ...args) {
+	if (typeof data === "function") return data(...args);
+	else return data;
 }
 
 function setRowCol(upgrades) {

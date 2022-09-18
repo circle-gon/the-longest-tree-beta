@@ -46,12 +46,14 @@ function getPointGen() {
 
   let gain = Decimal.dOne
   if (hasUpgrade("r", 12)) gain = gain.add(upgradeEffect("r", 12))
+  if (hasUpgrade("p", 15)) gain = gain.mul(clickableEffect("p", 11))
   if (hasUpgrade("p", 11)) gain = gain.times(Decimal.dTwo)
   if (hasUpgrade("p", 12)) gain = gain.times(Decimal.dTwo)
   if (hasUpgrade("p", 13)) gain = gain.times(upgradeEffect("p", 13))
   if (hasUpgrade("p", 14)) gain = gain.times(upgradeEffect("p", 14))
 	if (hasUpgrade("p", 32)) gain=gain.mul(clickableEffect("p", 11))
-  gain = gain.pow(Decimal.pow(1.05, Math.min(25, player.d.upgrades.filter(x=>(x%10<6&&x/10<6)).length)))
+	if(hasUpgrade("r",31))gain=gain.mul(2)
+  gain = gain.pow(Decimal.pow(1.01, Math.min(25, player.d.upgrades.filter(x=>(x%10<6&&x/10<6)).length)))
   if (player.d.unlocked) gain = gain.pow(tmp.d.effect)
   return gain
 }

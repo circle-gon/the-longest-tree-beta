@@ -34,7 +34,7 @@ function challengeButtonText(layer, id) {
   return hasChallenge(layer, id) ? "Completed" : "Start";
 }
 
-function achievementStyle(layer, id){
+function achievementStyle(layer, id) {
     const ach = tmp[layer].achievements[id]
     const style = []
     if (ach.image) { 
@@ -48,10 +48,10 @@ function achievementStyle(layer, id){
 
 
 function updateWidth() {
-	let screenWidth = window.innerWidth
+	const screenWidth = window.innerWidth
 	let splitScreen = screenWidth >= 1024
 	if (options.forceOneTab) splitScreen = false
-	if (player.navTab == "none") splitScreen = true
+	if (player.navTab === "none") splitScreen = true
 	tmp.other.screenWidth = screenWidth
 	tmp.other.screenHeight = window.innerHeight
 	tmp.other.splitScreen = splitScreen
@@ -82,11 +82,11 @@ function updateOomps(diff) {
 }
 
 function constructBarStyle(layer, id) {
-	let bar = tmp[layer].bars[id]
-	let style = {}
+	const bar = tmp[layer].bars[id]
+	const style = {}
 	if (bar.progress instanceof Decimal)
 		bar.progress = bar.progress.toNumber()
-	bar.progress = (1 -Math.min(Math.max(bar.progress, 0), 1)) * 100
+	bar.progress = (1 - Math.min(Math.max(bar.progress, 0), 1)) * 100
 
 	style.dims = {'width': bar.width + "px", 'height': bar.height + "px"}
 	let dir = bar.direction

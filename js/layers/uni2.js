@@ -88,11 +88,21 @@ addLayer("r", {
     },
     23: {
       title: "^^^^^^^^^^^^",
-      description: "Unlock the shop (next update)",
+      description: "Unlock the shop!",
       cost: new Decimal(56),
       unlocked() {
         return hasUpgrade("r", 22)
       }
+    },
+		31: {
+      title: "Generic Upgrade 20",
+      description: "Doubles point gain.",
+      cost: new Decimal(25)
+    },
+  	32: {
+      title: "More maggots!",
+      description: "Spend your money on more maggots, therefore boosting garbage collection even more!",
+      cost: new Decimal(25)
     },
   },
 	update(diff){
@@ -102,13 +112,27 @@ addLayer("r", {
 		let gain = player.r.points.add(Decimal.dOne).log10().pow(Decimal.dTwo)
 		return gain
 	},
-  tabFormat: [
+  tabFormat: {
+		"Upgrades": {
+			unlocked(){return true},
+			content:[
     "main-display",
     "prestige-button",
     "resource-display",
-    "upgrades",
+    ["row",[["upgrade",11],["upgrade",12],["upgrade",13]]],
+				["row",[["upgrade",21],["upgrade",22],["upgrade",23]]],
 		["display-text", () => {
 			if (hasMilestone("d", 0)) return "You have $" + format(player.r.money) + ". You are gaining $" + format(tmp.r.moneyGain) + "/s."
     }]
-  ]
+				]
+				},
+		"Shop": {
+			unlocked(){return hasUpgrade("r",23)},
+			content:["main-display",
+    "prestige-button",
+    "resource-display",
+							 ["row",[["upgrade",31],["upgrade",32]]],
+			],
+    }
+  }
 })
