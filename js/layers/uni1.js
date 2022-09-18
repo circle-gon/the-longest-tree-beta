@@ -17,10 +17,15 @@ addLayer("p", {
     return player.points 
   }, // Get the current amount of baseResource
   type: "normal", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
-  exponent: 0.75, // Prestige currency exponent
+  exponent() {
+		if (player.d.points.lte(3)) return 0.75
+		return new Decimal(0.01).add(Decimal.div(0.74, player.d.points.sub(3).div(20).add(Decimal.dOne)))
+	
+	}, // Prestige currency exponent
   gainMult() { // Calculate the multiplier for main currency from bonuses
     let mult = Decimal.dOne
     if (hasUpgrade("p", 25)) mult = mult.mul(upgradeEffect("p", 25))
+    if (hasUpgrade("p", 15)) mult = mult.mul(clickableEffect("p", 11))
     if (hasUpgrade("r", 11)) mult = mult.mul(upgradeEffect("r", 11))
     return mult
   },
@@ -60,20 +65,20 @@ addLayer("p", {
         return player.p.points.gt(Decimal.dZero)
       },
       effect() {
-        return Decimal.dOne.add(getClickableState("p", 11)).log(4).plus(Decimal.dOne)
+        return Decimal.dOne.add(getClickableState("p", 11)).log(8).plus(Decimal.dOne)
       },
       gain() {
         let dump = player.p.points
-        if (hasUpgrade("p", 23)) dump = dump.pow(Decimal.dTwo)
-        if (hasUpgrade("r", 32)) dump = dump.pow(Decimal.dTwo)
         if (hasUpgrade("p", 31)) dump = dump.mul(upgradeEffect("p", 31))
+        if (hasUpgrade("p", 23)) dump = dump.pow(new Decimal(1.8))
+        if (hasUpgrade("r", 32)) dump = dump.pow(new Decimal(1.2))
         return dump
       }
     },
 		12: {
       title: "Garbage Incinerator",
       display() {
-        return `Throw some of your extra garbage into this incinerator to get a boost to points!<br>Amount of burned garbage: ${format(getClickableState("p", 12))}<br>Effect: ${format(clickableEffect("p", 12))}x<br>Click to burn ${format(tmp.p.clickables[12].gain)} garbage!`
+        return `Throw some of your extra garbage into this incinerator to get a boost to points and prestige points!<br>Amount of burned garbage: ${format(getClickableState("p", 12))}<br>Effect: ${format(clickableEffect("p", 12))}x<br>Click to burn ${format(tmp.p.clickables[12].gain)} garbage!`
       },
       unlocked() {
         return hasUpgrade("p", 32)
@@ -165,7 +170,7 @@ addLayer("p", {
     },
     23: {
       title: "Upgrade with garbage name",
-      description: "For your sanity, we've decided to not show you the pathetic, garbage pun. (raises prestige point to garbage conversion by 2)",
+      description: "For your sanity, we've decided to not show you the pathetic, garbage pun. (raises prestige point to garbage conversion by 1.8)",
       cost: new Decimal(500),
       unlocked() {
         return hasUpgrade("p", 15)
@@ -263,19 +268,21 @@ addLayer("d", {
   type: "static", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
   base: 1,
   exponent: 1, // Prestige currency exponent
-  gainMult() { // Calculate the multiplier for main currency from bonuses
-    let mult = Decimal.dOne
-    return mult
-  },
-  gainExp() { // Calculate the exponent on main currency from bonuses
-    let exp = Decimal.dOne
-    return exp
-  }, //hi
+  gainMult: Decimal.dOne, // Calculate the multiplier for main currency from bonuses
+  gainExp: Decimal.dOne, // Calculate the exponent on main currency from bonuses
   row: 1, // Row the layer is in on the tree (0 is the first row)
   hotkeys: [
-    { key: "d", description: "D: Reset for difficulty", onPress() { if (canReset(this.layer)) doReset(this.layer) } },
+    { 
+      key: "d", 
+      description: "D: Reset for difficulty", 
+      onPress() { 
+        if (canReset("d")) doReset("d") 
+      } 
+    },
   ],
-  layerShown() { return player.u.universe === 1 && (hasUpgrade("p", 31)||player.d.unlocked) },
+  layerShown() { 
+    return player.u.universe === 1 && (hasUpgrade("p", 31) || player.d.unlocked) 
+  },
    upgrades: {
     11: { // 11->51 + 12, 12->52 + 13, 13->53 + 14, 14->54 + 15, 15->55 
       title: "Generic upgrades",
@@ -288,7 +295,7 @@ addLayer("d", {
     cost: new Decimal(5),
     unlocked() {
       return hasUpgrade("d", 11)
-      },
+    },
     },
     13: { // 11->51 + 12, 12->52 + 13, 13->53 + 14, 14->54 + 15, 15->55 
     title: "Generic upgrades",
@@ -476,18 +483,22 @@ addLayer("d", {
     },
    },
 	effect() {
-    return Decimal.pow(hasMilestone("d",1)?0.85:0.8, player.d.points)
+    return Decimal.pow(hasMilestone("d",1) ? 0.85 : 0.8, player.d.points)
   },
   milestones:{
 		0:{
 			requirementDescription: "3 Difficulty",
 			effectDescription: "Keep U1, U2, and the universe machine unlocked. Unlock a new U2 feature. Sadly, your garbage collector got taken away :(",
-			done(){return player.d.points.gte(3)},
+			done() {
+        return player.d.points.gte(3)
+      },
 		},
 		1:{
 			requirementDescription: "4 Difficulty",
-			effectDescription: "The Difficulty effect is now 0.85^x.",
-			done(){return player.d.points.gte(4)},
+			effectDescription: "The Difficulty effect is now 0.85^x. Difficulty now nerfs prestige gain exponent.",
+			done() {
+        return player.d.points.gte(4)
+      },
 		},
 	},
   tabFormat: [

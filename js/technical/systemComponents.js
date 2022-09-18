@@ -1,4 +1,4 @@
-var systemComponents = {
+const systemComponents = {
 	'tab-buttons': {
 		props: ['layer', 'data', 'name'],
 		template: `
@@ -176,7 +176,7 @@ var systemComponents = {
 
     'back-button': {
         template: `
-        <button v-bind:class="back" onclick="goBack()">←</button>
+        <button class="back" v-on:click="goBack()">←</button>
         `
     },
 
@@ -212,7 +212,7 @@ var systemComponents = {
 
 	'bg': {
 		props: ['layer'],
-		template: `<div class ="bg" v-bind:style="[tmp[layer].style ? tmp[layer].style : {}, (tmp[layer].tabFormat && !Array.isArray(tmp[layer].tabFormat)) ? tmp[layer].tabFormat[player.subtabs[layer].mainTabs].style : {}]"></div>
+		template: `<div class="bg" v-bind:style="[tmp[layer].style ?? {}, (tmp[layer].tabFormat && !Array.isArray(tmp[layer].tabFormat)) ? tmp[layer].tabFormat[player.subtabs[layer].mainTabs].style : {}]"></div>
 		`
 	}
 

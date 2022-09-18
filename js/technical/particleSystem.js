@@ -4,28 +4,24 @@ let mouseX = 0;
 let mouseY = 0;
 
 function makeParticles(data, amount = 1, type = "normal") {
-    for (let i = 0; x < amount; x++) {
-        let particle = newParticles[type]()
-        for (thing in data) {
-
-            switch(thing) {
-                case 'onClick': // Functions that should be copied over
-                case 'onMouseEnter':
-                case 'onMouseLeave':
-                case 'update':
-                    particle[thing] = data[thing]
+    for (let i = 0; i < amount; i++) {
+        const particle = newParticles[type]()
+        for (const thing in data) {
+            switch (thing) {
+                case "onClick": // Functions that should be copied over
+                case "onMouseEnter":
+                case "onMouseLeave":
+                case "update":
+                    particle[thing] = data[thing];
                     break;
                 default:
-                    particle[thing]=run(data[thing], data, x)
-                    
+                    particle[thing] = run(data[thing], data, i);   
             }
         }
-        if (data.dir === undefined) {
-            particle.dir = particle.angle
-        }
-        particle.dir = particle.dir + (particle.spread * (x- amount/2 + 0.5))
+        if (data.dir === undefined) particle.dir = particle.angle;
+        particle.dir += particle.spread * (i - amount / 2 + 0.5)
 
-        if(particle.offset) {
+        if (particle.offset) {
             particle.x += particle.offset * sin(particle.dir)
             particle.y += particle.offset * cos(particle.dir) * -1
         }
@@ -33,8 +29,7 @@ function makeParticles(data, amount = 1, type = "normal") {
         particle.xVel = particle.speed * sin(particle.dir)
         particle.yVel = particle.speed * cos(particle.dir) * -1
         particle.fadeInTimer = particle.fadeInTime
-	    Vue.set(particles, particle.id, particle)
-
+	      Vue.set(particles, particle.id, particle)
     }
 }
 
@@ -45,23 +40,21 @@ function makeShinies(data, amount=1) {
 
 
 function updateParticles(diff) {
-	for (p in particles) {
-        let particle = particles[p]
+	for (const p in particles) {
+    const particle = particles[p]
 		particle.time -= diff;
-        particle.fadeInTimer -= diff;
-		if (particle["time"] < 0) {
-			Vue.delete(particles, p); 
-            
-		}
-        else {
-            if (particle.update) run(particle.update, particle)
-            particle.angle += particle.rotation
-            particle.x += particle.xVel
-            particle.y += particle.yVel
-            particle.speed = Math.sqrt(Math.pow(particle.xVel, 2) + Math.pow(particle.yVel, 2))
-            particle.dir = atan(-particle.xVel/particle.yVel)
-            particle.yVel += particle.gravity
-        }
+    particle.fadeInTimer -= diff;
+		if (particle.time < 0) {
+      Vue.delete(particles, p); 
+      return;
+    }
+    particle.update?.();
+    particle.angle += particle.rotation;
+    particle.x += particle.xVel;
+    particle.y += particle.yVel;
+    particle.speed = Math.sqrt(Math.pow(particle.xVel, 2) + Math.pow(particle.yVel, 2));
+    particle.dir = atan(-particle.xVel / particle.yVel);
+    particle.yVel += particle.gravity;
 	}
 }
 
@@ -134,18 +127,15 @@ function updateMouse(event) {
 }
 
 function getOpacity(particle) {
-    if ((particle.time < particle.fadeOutTime) && particle.fadeOutTime)
-        return particle.time / particle.fadeOutTime
-    if (particle.fadeInTimer > 0) 
-        return 1 - (particle.fadeInTimer / particle.fadeInTime)
-    
+    if (particle.time < particle.fadeOutTime && particle.fadeOutTime) return particle.time / particle.fadeOutTime
+    if (particle.fadeInTimer > 0) return 1 - (particle.fadeInTimer / particle.fadeInTime)
     return 1
 }   
 
 function constructParticleStyle(particle){
-    let style =  {
-        left: (particle.x  - particle.height/2) + 'px',
-        top: (particle.y - particle.height/2) + 'px',
+    const style =  {
+        left: (particle.x - particle.height / 2) + 'px',
+        top: (particle.y - particle.height / 2) + 'px',
         width: particle.width + 'px',
         height: particle.height + 'px',
         transform: "rotate(" + particle.angle + "deg)",
@@ -162,13 +152,9 @@ function constructParticleStyle(particle){
     return style
 }
 
-function clearParticles(check) {
-    if (!check) check = true
-
-    for (p in particles) {
-        if (run(check, particles[p], particles[p])){
-            Vue.delete(particles, p)
-        }
+function clearParticles(check = true) {
+    for (const p in particles) {
+        if (run(check, particles[p], particles[p])) Vue.delete(particles, p)
     }
 }
 

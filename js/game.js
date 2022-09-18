@@ -1,4 +1,4 @@
-var player, needCanvasUpdate = true;
+let player, needCanvasUpdate = true;
 
 // Don't change this
 const TMT_VERSION = {
@@ -8,7 +8,7 @@ const TMT_VERSION = {
 
 function getResetGain(layer, useType) {
   const type = useType ?? tmp[layer].type
-  if (!useType && layers[layer].getResetGain !== undefined) {
+  if (!useType && layers[layer].getResetGain) {
     return layers[layer].getResetGain()
   }
   if (tmp[layer].type === "none")
@@ -385,16 +385,16 @@ function hardReset(resetOptions) {
   window.location.reload();
 }
 
-var ticking = false
+let ticking = false
 
-var interval = setInterval(function() {
-  if (player === undefined || tmp === undefined) return;
+let interval = setInterval(() => {
+  if (!player || !tmp) return;
   if (ticking) return;
   if (tmp.gameEnded && !player.keepGoing) return;
   ticking = true
-  let now = Date.now()
+  const now = Date.now()
   let diff = (now - player.time) / 1e3
-  let trueDiff = diff
+  const trueDiff = diff
   if (player.offTime !== undefined) {
     if (player.offTime.remain > modInfo.offlineLimit * 3600) player.offTime.remain = modInfo.offlineLimit * 3600
     if (player.offTime.remain > 0) {
@@ -404,7 +404,7 @@ var interval = setInterval(function() {
     }
     if (!options.offlineProd || player.offTime.remain <= 0) player.offTime = undefined
   }
-  if (player.devSpeed) diff *= player.devSpeed
+  if (player.devSpeed !== undefined) diff *= player.devSpeed
   player.time = now
   if (needCanvasUpdate) {
     resizeCanvas();
@@ -422,4 +422,4 @@ var interval = setInterval(function() {
   ticking = false
 }, 50)
 
-setInterval(function() { needCanvasUpdate = true }, 500)
+setInterval(() => needCanvasUpdate = true, 500)

@@ -19,7 +19,7 @@ addLayer("r", {
   baseResource: "points", // Name of resource prestige is based on
   baseAmount() { return player.points }, // Get the current amount of baseResource
   type: "normal", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
-  exponent: 0.5, // Prestige currency exponent
+  exponent: 0.05, // Prestige currency exponent
   gainMult() { // Calculate the multiplier for main currency from bonuses
     let mult = Decimal.dOne
 		if (hasUpgrade("r", 22)) mult = mult.mul(upgradeEffect("r", 22))
@@ -101,7 +101,7 @@ addLayer("r", {
     },
   	32: {
       title: "More maggots!",
-      description: "Spend your money on more maggots, therefore boosting garbage collection even more!",
+      description: "Spend your money on more maggots, therefore boosting garbage even more! Raises prestige points to garbage conversation by 1.2.",
       cost: new Decimal(25)
     },
   },
