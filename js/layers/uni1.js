@@ -51,7 +51,7 @@ addLayer("p", {
     11: {
       title: "Garbage collector",
       display() {
-        return `Throw some of your extra prestige points into this garbage collector to get a boost to points!<br>Amount of garbage: ${format(getClickableState("p", 11))}<br>Effect: ${format(clickableEffect("p", 11))}x<br>Click to gain ${format(tmp.p.clickables[11].gain)} garbage!`
+        return `Throw some of your extra prestige points into this garbage collector to get a boost to points and prestige points!<br>Amount of garbage: ${format(getClickableState("p", 11))}<br>Effect: ${format(clickableEffect("p", 11))}x<br>Click to gain ${format(tmp.p.clickables[11].gain)} garbage!`
       },
       unlocked() {
         return hasUpgrade("p", 15)
@@ -78,7 +78,7 @@ addLayer("p", {
 		12: {
       title: "Garbage Incinerator",
       display() {
-        return `Throw some of your extra garbage into this incinerator to get a boost to points and prestige points!<br>Amount of burned garbage: ${format(getClickableState("p", 12))}<br>Effect: ${format(clickableEffect("p", 12))}x<br>Click to burn ${format(tmp.p.clickables[12].gain)} garbage!`
+        return `Throw some of your extra garbage into this incinerator to get a boost to points!<br>Amount of burned garbage: ${format(getClickableState("p", 12))}<br>Effect: ${format(clickableEffect("p", 12))}x<br>Click to burn ${format(tmp.p.clickables[12].gain)} garbage!`
       },
       unlocked() {
         return hasUpgrade("p", 32)
