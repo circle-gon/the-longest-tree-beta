@@ -2,7 +2,7 @@
 
 function respecBuyables(layer) {
 	if (!player[layer].noRespecConfirm && !confirm(tmp[layer].buyables.respecMessage ?? "Are you sure you want to respec? This will force you to do a \"" + (tmp[layer].name ? tmp[layer].name : layer) + "\" reset as well!")) return
-	run(layers[layer].buyables.respec, layers[layer].buyables)
+	layers[layer].buyables.respec()
 	updateBuyableTemp(layer)
 	document.activeElement.blur()
 }
@@ -369,8 +369,8 @@ function adjustPopupTime(diff) {
 	}
 }
 
-function run(func, target, args = null) {
-	return isFunction(func) ? func.apply(args, target) : func
+function run(func, target, ...args) {
+	return isFunction(func) ? func.call(target, ...args) : func
 }
 
 function gridRun(layer, func, data, id) {
@@ -378,6 +378,5 @@ function gridRun(layer, func, data, id) {
 		let bound = layers[layer].grid[func].bind(layers[layer].grid)
 		return bound(data, id)
 	}
-	else
-		return layers[layer].grid[func];
+	else return layers[layer].grid[func];
 }
