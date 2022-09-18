@@ -1,5 +1,4 @@
-var player;
-var needCanvasUpdate = true;
+var player, needCanvasUpdate = true;
 
 // Don't change this
 const TMT_VERSION = {
@@ -7,28 +6,26 @@ const TMT_VERSION = {
   tmtName: "Fixed Reality"
 }
 
-function getResetGain(layer, useType = null) {
-  let type = useType
-  if (!useType) {
-    type = tmp[layer].type
-    if (layers[layer].getResetGain !== undefined)
-      return layers[layer].getResetGain()
+function getResetGain(layer, useType) {
+  const type = useType ?? tmp[layer].type
+  if (!useType && layers[layer].getResetGain !== undefined) {
+    return layers[layer].getResetGain()
   }
-  if (tmp[layer].type == "none")
+  if (tmp[layer].type === "none")
     return new Decimal(0)
   if (tmp[layer].gainExp.eq(0)) return decimalZero
-  if (type == "static") {
+  if (type === "static") {
     if ((!tmp[layer].canBuyMax) || tmp[layer].baseAmount.lt(tmp[layer].requires)) return decimalOne
     let gain = tmp[layer].baseAmount.div(tmp[layer].requires).div(tmp[layer].gainMult).max(1).log(tmp[layer].base).times(tmp[layer].gainExp).pow(Decimal.pow(tmp[layer].exponent, -1))
     gain = gain.times(tmp[layer].directMult)
     return gain.floor().sub(player[layer].points).add(1).max(1);
-  } else if (type == "normal") {
+  } else if (type === "normal") {
     if (tmp[layer].baseAmount.lt(tmp[layer].requires)) return decimalZero
     let gain = tmp[layer].baseAmount.div(tmp[layer].requires).pow(tmp[layer].exponent).times(tmp[layer].gainMult).pow(tmp[layer].gainExp)
     if (gain.gte(tmp[layer].softcap)) gain = gain.pow(tmp[layer].softcapPower).times(tmp[layer].softcap.pow(decimalOne.sub(tmp[layer].softcapPower)))
     gain = gain.times(tmp[layer].directMult)
     return gain.floor().max(0);
-  } else if (type == "custom") {
+  } else if (type === "custom") {
     return layers[layer].getResetGain()
   } else {
     return decimalZero
@@ -71,8 +68,7 @@ function getNextAt(layer, canMax = false, useType = null) {
 
 function softcap(value, cap, power = 0.5) {
   if (value.lte(cap)) return value
-  else
-    return value.pow(power).times(cap.pow(decimalOne.sub(power)))
+  return value.pow(power).times(cap.pow(Decimal.dOne.sub(power)))
 }
 
 // Return true if the layer should be highlighted. By default checks for upgrades only.

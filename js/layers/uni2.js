@@ -10,6 +10,7 @@ addLayer("r", {
       unlocked: true,
       points: Decimal.dZero,
       dumped: Decimal.dZero,
+			money: Decimal.dZero,
     }
   },
   color: "#B423EC",
@@ -21,58 +22,93 @@ addLayer("r", {
   exponent: 0.5, // Prestige currency exponent
   gainMult() { // Calculate the multiplier for main currency from bonuses
     let mult = Decimal.dOne
+		if (hasUpgrade("r", 22)) mult = mult.mul(upgradeEffect("r", 22))
     return mult
   },
-  gainExp() { // Calculate the exponent on main currency from bonuses
-    let exp = Decimal.dOne
-    return exp
-  },
+  gainExp: Decimal.dOne, // Calculate the exponent on main currency from bonuses
   row: 0, // Row the layer is in on the tree (0 is the first row)
   hotkeys: [
-    { key: "r", description: "R: Reset for reputation points", onPress() { 
-    if (canReset(this.layer)) doReset(this.layer) 
-    } 
+    { 
+      key: "r", 
+      description: "R: Reset for reputation points", 
+      onPress() { 
+        if (canReset(this.layer)) doReset(this.layer) 
+      } 
     },
   ],
-  layerShown() { return player.u.universe === 2 },
+  layerShown() { 
+    return player.u.universe === 2 
+  },
   upgrades: {
     11: {
       title: "Reputation boost",
       description() { return "Reputation boosts prestige point gain. Currently: x" + format(tmp.r.upgrades[11].effect) },
-      cost: new Decimal(1),
+      cost: Decimal.dOne,
       effect() {
-        return player.r.points.add(1).cbrt()
-      },
-      unlocked() {
-        return true
+        return player.r.points.add(Decimal.dOne).cbrt()
       }
     },
     12: {
       title: "Oh no, more recursion!",
-      description() { return "Per upgrade add 1 to base point gain. Currently: +" + formatWhole(tmp.r.upgrades[12].effect) },
+      description() { 
+        return "Per upgrade add 1 to base point gain. Currently: +" + formatWhole(tmp.r.upgrades[12].effect) 
+      },
       cost: new Decimal(5),
       effect() {
         return player.r.upgrades.length
       },
-      unlocked() {
-        return true
-      }
     },
     13: {
       title: "An Established Link",
       description() {
         return hasUpgrade("r", 13) ? "You really didn't think the developer was that evil right?" : "Re-establish the link between U1 and U2."
       },
-      cost: new Decimal(25),
+      cost: new Decimal(25)
+    },
+    21: {
+      title: "$$$$$$$$$$$$$$",
+      description: "Start gaining money based on your reputation.",
+      cost: new Decimal(1),
       unlocked() {
-        return true
+        return hasMilestone("d", 0)
+      }
+    },
+    22: {
+      title: "%%%%%%%%%%%%%",
+      description() {
+        return "Use your wealth to gain more reputation! Currently: x" + format(upgradeEffect(this.layer, this.id))
+      },
+			effect() {
+        return player.r.money.pow(0.25)
+      }, //just ^0.25
+      cost: Decimal.dTwo,
+      unlocked() {
+        return hasUpgrade("r", 21)
+      }
+    },
+    23: {
+      title: "^^^^^^^^^^^^",
+      description: "Unlock the shop (next update)",
+      cost: new Decimal(56),
+      unlocked() {
+        return hasUpgrade("r", 22)
       }
     },
   },
+	update(diff){
+		if (hasUpgrade("r", 21)) player.r.money = player.r.money.add(tmp.r.moneyGain.mul(diff))
+	},
+	moneyGain() {
+		let gain = player.r.points.add(Decimal.dOne).log10().pow(Decimal.dTwo)
+		return gain
+	},
   tabFormat: [
     "main-display",
     "prestige-button",
     "resource-display",
     "upgrades",
+		["display-text", () => {
+			if (hasMilestone("d", 0)) return "You have $" + format(player.r.money) + ". You are gaining $" + format(tmp.r.moneyGain) + "/s."
+    }]
   ]
 })

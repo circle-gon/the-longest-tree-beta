@@ -2,39 +2,36 @@ let app;
 
 function loadVue() {
 	// data = a function returning the content (actually HTML)
-	Vue.component('display-text', {
-		props: ['layer', 'data'],
-		template: `
-		  <span class="instant" v-html="data"></span>
-		`
-	})
+	Vue.component("display-text", {
+		props: ["layer", "data"],
+		template: `<span class="instant" v-html="data"></span>`
+	});
 
 // data = a function returning the content (actually HTML)
-	Vue.component('raw-html', {
-			props: ['layer', 'data'],
-			template: `
-				<span class="instant"  v-html="data"></span>
-			`
-		})
+	Vue.component("raw-html", {
+			props: ["layer", "data"],
+			template: `<span class="instant"  v-html="data"></span>`
+		});
 
 	// Blank space, data = optional height in px or pair with width and height in px
-	Vue.component('blank', {
-		props: ['layer', 'data'],
-		template: `
-			<div class = "instant">
-			<div class = "instant" v-if="!data" v-bind:style="{'width': '8px', 'height': '17px'}"></div>
-			<div class = "instant" v-else-if="Array.isArray(data)" v-bind:style="{'width': data[0], 'height': data[1]}"></div>
-			<div class = "instant" v-else v-bind:style="{'width': '8px', 'height': data}"><br></div>
-			</div>
-		`
+	Vue.component("blank", {
+		props: ["layer", "data"],
+    computed: {
+      style() {
+        const isArray = Array.isArray(this.data);
+        return {
+          height: isArray ? this.data[1] : this.data ?? "8px",
+          width: isArray ? this.data[0] : "17px"
+        } 
+      }
+    },
+		template: `div class="instant" :style="style"></div>`
 	})
 
 	// Displays an image, data is the URL
-	Vue.component('display-image', {
-		props: ['layer', 'data'],
-		template: `
-			<img class="instant" v-bind:src= "data" v-bind:alt= "data">
-		`
+	Vue.component("display-image", {
+		props: ["layer", "data"],
+		template: `<img class="instant" :src="data" :alt="data">`
 	})
 		
 	// data = an array of Components to be displayed in a row

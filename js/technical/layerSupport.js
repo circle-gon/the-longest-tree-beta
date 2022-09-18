@@ -206,7 +206,7 @@ function setupLayer(layer){
 }
 
 
-function addLayer(layerName, layerData, tabLayers = null){ // Call this to add layers from a different file!
+function addLayer(layerName, layerData, tabLayers = null) { // Call this to add layers from a different file!
     layers[layerName] = layerData
     layers[layerName].isLayer = true
     if (tabLayers !== null)
@@ -237,7 +237,7 @@ function addNode(layerName, layerData){ // Does the same thing, but for non-laye
 }
 
 // If data is a function, return the result of calling it. Otherwise, return the data.
-function readData(data, args=null){
+function readData(data, args = null){
 	if ((!!data && data.constructor && data.call && data.apply))
 		return data(args);
 	else
@@ -246,22 +246,20 @@ function readData(data, args=null){
 
 function setRowCol(upgrades) {
     if (upgrades.rows && upgrades.cols) return
-    let maxRow = 0
-    let maxCol = 0
-    for (up in upgrades) {
-        if (!isNaN(up)) {
-            if (Math.floor(up/10) > maxRow) maxRow = Math.floor(up/10)
-            if (up%10 > maxCol) maxCol = up%10
-        }
+    let maxRow = 0, maxCol = 0
+    for (const up in upgrades) {
+        if (isNaN(up)) continue;
+        maxRow = Math.max(Math.floor(up / 10), maxRow)
+        maxCol = Math.max(up % 10, maxCol)
     }
     upgrades.rows = maxRow
     upgrades.cols = maxCol
 }
 
-function someLayerUnlocked(row){
-    for (layer in ROW_LAYERS[row])
-        if (player[layer].unlocked)
-            return true
+function someLayerUnlocked(row) {
+    for (const layer in ROW_LAYERS[row]) {
+      if (player[layer].unlocked) return true
+    }
     return false
 }
 
@@ -284,6 +282,6 @@ addLayer("options-tab", {
 })
 
 addLayer("changelog-tab", {
-    tabFormat() {return ([["raw-html", modInfo.changelog]])},
+    tabFormat: [["raw-html", () => modInfo.changelog]],
     row: "otherside"
 })

@@ -18,19 +18,21 @@ function getStartOptions() {
 }
 
 function toggleOpt(name) {
-	if (name == "oldStyle" && styleCooldown > 0)
+	if (name === "oldStyle" && styleCooldown > 0)
 		return;
 
 	options[name] = !options[name];
-	if (name == "hqTree")
+	if (name === "hqTree")
 		changeTreeQuality();
-	if (name == "oldStyle")
+	if (name === "oldStyle")
 		updateStyle();
 }
-var styleCooldown = 0;
+
+let styleCooldown = 0;
+
 function updateStyle() {
 	styleCooldown = 1;
-	let css = document.getElementById("styleStuff");
+	const css = document.getElementById("styleStuff");
 	css.href = options.oldStyle ? "oldStyle.css" : "style.css";
 	needCanvasUpdate = true;
 }

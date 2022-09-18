@@ -1,25 +1,27 @@
+// DO NOT CHANGE ID
 const modInfo = {
   name: "The Biggest Tree",
   id: "BigTreeID123",
   author: "A Group Of People",
   pointsName: "points",
   modFiles: ["tree.js", "layers/universeMachine.js", "layers/uni1.js", "layers/uni2.js"],
-  discordName: "",
-  discordLink: "",
+  discordName: "The Longest Tree",
+  discordLink: "https://discord.gg/EyyjFVVwTS",
   initialStartPoints: Decimal.dTen, // Used for hard resets and new players
-  offlineLimit: 10,  // In hours
+  offlineLimit: 168,  // In hours
 }
 
 // Set your version in num and name
 const VERSION = {
-  num: "0.0",
-  name: "Literally nothing",
+  num: "0.0.1 Beta",
+  name: "The Longest Prestige",
 }
 
 const changelog = `<h1>Changelog:</h1><br>
-	<h3>v0.0</h3><br>
-		- Added things.<br>
-		- Added stuff.`
+	<h3>v0.0.1</h3><br>
+		- Added universes, U1, U2, Prestige, Reputation, and Difficulty.<br>
+		- Added upgrades and the Universe Transportation Machine.<br>
+		- Added the Garbage collector and incinerator.`
 
 const winText = "Congratulations! You have reached the end and beaten this game, for now..."
 
@@ -49,6 +51,7 @@ function getPointGen() {
   if (hasUpgrade("p", 13)) gain = gain.times(upgradeEffect("p", 13))
   if (hasUpgrade("p", 14)) gain = gain.times(upgradeEffect("p", 14))
 	if (hasUpgrade("p", 32)) gain=gain.mul(clickableEffect("p", 11))
+  gain = gain.pow(Decimal.pow(1.05, Math.min(25, player.d.upgrades.filter(x=>(x%10<6&&x/10<6)).length)))
   if (player.d.unlocked) gain = gain.pow(tmp.d.effect)
   return gain
 }
@@ -67,7 +70,7 @@ const displayThings = [
 
 // Determines when the game "ends"
 function isEndgame() {
-  return player.points.gte("e280000000")
+  return hasUpgrade("r",23)
 }
 
 
