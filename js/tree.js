@@ -1,4 +1,4 @@
-var layoutInfo = {
+const layoutInfo = {
   startTab: "none",
   startNavTab: "tree-tab",
 	showTree: true,
