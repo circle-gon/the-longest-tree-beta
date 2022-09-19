@@ -1,11 +1,15 @@
 // ************ Themes ************
-var themes = ["default", "aqua"]
+const themes = [
+  "default", 
+  "aqua", 
+  "compact2"
+]; // this is going to be fun
 
-var colors = {
+const colors = {
 	default: {
-		1: "#ffffff",//Branch color 1
-		2: "#bfbfbf",//Branch color 2
-		3: "#7f7f7f",//Branch color 3
+		1: "#ffffff", // Branch color 1
+		2: "#bfbfbf", // Branch color 2
+		3: "#7f7f7f", // Branch color 3
 		color: "#dfdfdf",
 		points: "#ffffff",
 		locked: "#bf8f8f",
@@ -22,30 +26,34 @@ var colors = {
 		background: "#001f3f",
 		background_tooltip: "rgba(0, 15, 31, 0.75)",
 	},
+  compact2: {
+		1: "#f5bfff",
+		2: "#9d8fbf",
+		3: "#7f5f79",
+		color: "#af77c9",
+		points: "#c8b3ff",
+		locked: "#ff94a0",
+		background: "#7134eb", // purpl
+		background_tooltip: "rgba(30, 30, 130, 0.75)",
+	},
 }
-function changeTheme() {
 
-	colors_theme = colors[options.theme || "default"];
-	document.body.style.setProperty('--background', colors_theme["background"]);
-	document.body.style.setProperty('--background_tooltip', colors_theme["background_tooltip"]);
-	document.body.style.setProperty('--color', colors_theme["color"]);
-	document.body.style.setProperty('--points', colors_theme["points"]);
-	document.body.style.setProperty("--locked", colors_theme["locked"]);
+function changeTheme() {
+	colors_theme = colors[options.theme];
+	document.body.style.setProperty("--background", colors_theme.background);
+	document.body.style.setProperty("--background_tooltip", colors_theme["background_tooltip"]);
+	document.body.style.setProperty("--color", colors_theme.color);
+	document.body.style.setProperty("--points", colors_theme.points);
+	document.body.style.setProperty("--locked", colors_theme.locked);
 }
 function getThemeName() {
-	return options.theme? options.theme : "default";
+	return options.theme ?? "default";
 }
 
 function switchTheme() {
-	let index = themes.indexOf(options.theme)
-	if (options.theme === null || index >= themes.length-1 || index < 0) {
-		options.theme = themes[0];
-	}
-	else {
-		index ++;
-		options.theme = themes[index];
-		options.theme = themes[1];
-	}
+	const index = themes.indexOf(options.theme);
+	if (index >= themes.length - 1) options.theme = themes[0];
+	else options.theme = themes[index + 1];
 	changeTheme();
 	resizeCanvas();
 }

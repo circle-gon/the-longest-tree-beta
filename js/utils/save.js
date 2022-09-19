@@ -9,7 +9,7 @@ function save(force) {
 function startPlayerBase() {
 	return {
 		tab: layoutInfo.startTab,
-		navTab: (layoutInfo.showTree ? layoutInfo.startNavTab : "none"),
+		navTab: layoutInfo.showTree ? layoutInfo.startNavTab : "none",
 		time: Date.now(),
 		notify: {},
 		versionType: modInfo.id,
@@ -18,56 +18,45 @@ function startPlayerBase() {
 		timePlayed: 0,
 		keepGoing: false,
 		hasNaN: false,
-
 		points: modInfo.initialStartPoints,
 		subtabs: {},
-		lastSafeTab: (readData(layoutInfo.showTree) ? "none" : layoutInfo.startTab)
+		lastSafeTab: readData(layoutInfo.showTree) ? "none" : layoutInfo.startTab
 	};
 }
 function getStartPlayer() {
-	playerdata = startPlayerBase();
+	const playerData = startPlayerBase();
 
 	if (addedPlayerData) {
-		extradata = addedPlayerData();
-		for (thing in extradata)
-			playerdata[thing] = extradata[thing];
+		const extraData = addedPlayerData();
+		Object.assign(playerData, extraData);
 	}
 
 	playerdata.infoboxes = {};
-	for (layer in layers) {
-		playerdata[layer] = getStartLayerData(layer);
+	for (const layer in layers) {
+		playerData[layer] = getStartLayerData(layer);
 
 		if (layers[layer].tabFormat && !Array.isArray(layers[layer].tabFormat)) {
-			playerdata.subtabs[layer] = {};
-			playerdata.subtabs[layer].mainTabs = Object.keys(layers[layer].tabFormat)[0];
+			playerData.subtabs[layer] = {};
+			playerData.subtabs[layer].mainTabs = Object.keys(layers[layer].tabFormat)[0];
 		}
+    
 		if (layers[layer].microtabs) {
-			if (playerdata.subtabs[layer] == undefined)
-				playerdata.subtabs[layer] = {};
-			for (item in layers[layer].microtabs)
-				playerdata.subtabs[layer][item] = Object.keys(layers[layer].microtabs[item])[0];
+			if (playerdata.subtabs[layer] === undefined) playerdata.subtabs[layer] = {};
+			for (const item in layers[layer].microtabs) playerdata.subtabs[layer][item] = Object.keys(layers[layer].microtabs[item])[0];
 		}
 		if (layers[layer].infoboxes) {
-			if (playerdata.infoboxes[layer] == undefined)
-				playerdata.infoboxes[layer] = {};
-			for (item in layers[layer].infoboxes)
-				playerdata.infoboxes[layer][item] = false;
+			if (playerdata.infoboxes[layer] === undefined) playerdata.infoboxes[layer] = {};
+			for (item in layers[layer].infoboxes) playerdata.infoboxes[layer][item] = false;
 		}
-
 	}
 	return playerdata;
 }
-function getStartLayerData(layer) {
-	layerdata = {};
-	if (layers[layer].startData)
-		layerdata = layers[layer].startData();
 
-	if (layerdata.unlocked === undefined)
-		layerdata.unlocked = true;
-	if (layerdata.total === undefined)
-		layerdata.total = decimalZero;
-	if (layerdata.best === undefined)
-		layerdata.best = decimalZero;
+function getStartLayerData(layer) {
+	const layerData = layers[layer].startData?.() ?? {};
+	layerdata.unlocked ??= true;
+	layerdata.total ??= Decimal.dZero;
+	layerdata.best ??= Decimal.dZero;
 	if (layerdata.resetTime === undefined)
 		layerdata.resetTime = 0;
 	if (layerdata.forceTooltip === undefined)

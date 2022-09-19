@@ -13,7 +13,7 @@ const modInfo = {
 
 // Set your version in num and name
 const VERSION = {
-  num: "0.0.1 Beta",
+  num: "0.0.1.5 Beta",
   name: "The Longest Prestige",
 }
 
