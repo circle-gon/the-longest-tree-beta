@@ -10,7 +10,7 @@ function loadVue() {
 // data = a function returning the content (actually HTML)
 	Vue.component("raw-html", {
 			props: ["layer", "data"],
-			template: `<span class="instant"  v-html="data"></span>`
+			template: `<div class="instant"  v-html="data"></div>`
 		});
 
 	// Blank space, data = optional height in px or pair with width and height in px
@@ -660,3 +660,6 @@ function loadVue() {
 }
 
  
+
+
+

@@ -110,6 +110,7 @@ addLayer("r", {
 	},
 	moneyGain() {
 		let gain = player.r.points.add(Decimal.dOne).log10().pow(Decimal.dTwo)
+    if (hasUpgrade("m", 12) && !hasUpgrade("m", 13)) gain = gain.add(tmp.m.buyables[11].effect)
 		return gain
 	},
   tabFormat: {

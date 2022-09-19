@@ -49,7 +49,7 @@ addLayer("u", {
     return maxUniverse
   },
   tabFormat: [
-    ["display-html",
+    ["display-text",
       () => `You are currently in universe <b class="uni">${player.u.universe}</b>`],
     ["row",
       [

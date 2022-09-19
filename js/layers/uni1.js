@@ -155,7 +155,7 @@ addLayer("p", {
         return hasUpgrade("p", 22) ? "The godly challenge" : "Another useful upgrade?!"
       },
       description: "Unlocks a layer: [REDACTED]",
-      cost: new Decimal(1e696969),
+      cost: new Decimal("1e696969" ), // don't ask why
       unlocked() {
         return hasUpgrade("p", 15)
       }
@@ -285,12 +285,12 @@ addLayer("d", {
   },
    upgrades: {
     11: { // 11->51 + 12, 12->52 + 13, 13->53 + 14, 14->54 + 15, 15->55 
-      title: "Generic upgrades",
+      title: "Generic upgrade",
       description: "Unlocks more upgrades, raises point gain by 1.01",
       cost: new Decimal(4),
     },
     12: { // 11->51 + 12, 12->52 + 13, 13->53 + 14, 14->54 + 15, 15->55 
-    title: "Generic upgrades",
+    title: "Yet another generic upgrade",
     description: "Unlocks more upgrades, raises point gain by 1.01",
     cost: new Decimal(5),
     unlocked() {
@@ -298,189 +298,13 @@ addLayer("d", {
     },
     },
     13: { // 11->51 + 12, 12->52 + 13, 13->53 + 14, 14->54 + 15, 15->55 
-    title: "Generic upgrades",
-    description: "Unlocks more upgrades, raises point gain by 1.01",
+    title: "Something new?",
+    description: "Unlocks a <b><i>minigame</i></b>.",
     cost: new Decimal(6),
     unlocked() {
       return hasUpgrade("d", 12)
       },
-    },
-    14: { // 11->51 + 12, 12->52 + 13, 13->53 + 14, 14->54 + 15, 15->55 
-    title: "Generic upgrades",
-    description: "Unlocks more upgrades, raises point gain by 1.01",
-    cost: new Decimal(7),
-    unlocked() {
-      return hasUpgrade("d", 13)
-      },
-    },
-    15: { // 11->51 + 12, 12->52 + 13, 13->53 + 14, 14->54 + 15, 15->55 
-    title: "Generic upgrades",
-    description: "Unlocks more upgrades, raises point gain by 1.01",
-    cost: new Decimal(8),
-    unlocked() {
-      return hasUpgrade("d", 14)
-      },
-    },
-    21: { // 11->51 + 12, 12->52 + 13, 13->53 + 14, 14->54 + 15, 15->55 
-    title: "Generic upgrades",
-    description: "Unlocks more upgrades, raises point gain by 1.01",
-    cost: new Decimal(5),
-    unlocked() {
-      return hasUpgrade("d", 11)
-      },
-    },
-    22: { // 11->51 + 12, 12->52 + 13, 13->53 + 14, 14->54 + 15, 15->55 
-    title: "Generic upgrades",
-    description: "Unlocks more upgrades, raises point gain by 1.01",
-    cost: new Decimal(6),
-    unlocked() {
-      return hasUpgrade("d", 12)
-      },
-    },
-    23: { // 11->51 + 12, 12->52 + 13, 13->53 + 14, 14->54 + 15, 15->55 
-    title: "Generic upgrades",
-    description: "Unlocks more upgrades, raises point gain by 1.01",
-    cost: new Decimal(7),
-    unlocked() {
-      return hasUpgrade("d", 13)
-      },
-    },
-    24: { // 11->51 + 12, 12->52 + 13, 13->53 + 14, 14->54 + 15, 15->55 
-    title: "Generic upgrades",
-    description: "Unlocks more upgrades, raises point gain by 1.01",
-    cost: new Decimal(8),
-    unlocked() {
-      return hasUpgrade("d", 14)
-      },
-    },
-    25: { // 11->51 + 12, 12->52 + 13, 13->53 + 14, 14->54 + 15, 15->55 
-    title: "Generic upgrades",
-    description: "Unlocks more upgrades, raises point gain by 1.01",
-    cost: new Decimal(9),
-    unlocked() {
-      return hasUpgrade("d", 15)
-      },
-    },
-    31: { // 11->51 + 12, 12->52 + 13, 13->53 + 14, 14->54 + 15, 15->55 
-    title: "Generic upgrades",
-    description: "Unlocks more upgrades, raises point gain by 1.01",
-    cost: new Decimal(6),
-    unlocked() {
-      return hasUpgrade("d", 21)
-      },
-    },
-    32: { // 11->51 + 12, 12->52 + 13, 13->53 + 14, 14->54 + 15, 15->55 
-    title: "Generic upgrades",
-    description: "Unlocks more upgrades, raises point gain by 1.01",
-    cost: new Decimal(7),
-    unlocked() {
-      return hasUpgrade("d", 22)
-      },
-    },
-    33: { // 11->51 + 12, 12->52 + 13, 13->53 + 14, 14->54 + 15, 15->55 
-    title: "Generic upgrades",
-    description: "Unlocks more upgrades, raises point gain by 1.01",
-    cost: new Decimal(8),
-    unlocked() {
-      return hasUpgrade("d", 23)
-      },
-    },
-    34: { // 11->51 + 12, 12->52 + 13, 13->53 + 14, 14->54 + 15, 15->55 
-    title: "Generic upgrades",
-    description: "Unlocks more upgrades, raises point gain by 1.01",
-    cost: new Decimal(9),
-    unlocked() {
-      return hasUpgrade("d", 24)
-      },
-    },
-    35: { // 11->51 + 12, 12->52 + 13, 13->53 + 14, 14->54 + 15, 15->55 
-    title: "Generic upgrades",
-    description: "Unlocks more upgrades, raises point gain by 1.01",
-    cost: Decimal.dTen,
-    unlocked() {
-      return hasUpgrade("d", 25)
-      },
-    },
-    41: { // 11->51 + 12, 12->52 + 13, 13->53 + 14, 14->54 + 15, 15->55 
-    title: "Generic upgrades",
-    description: "Unlocks more upgrades, raises point gain by 1.01",
-    cost: new Decimal(7),
-    unlocked() {
-      return hasUpgrade("d", 31)
-      },
-    },
-    42: { // 11->51 + 12, 12->52 + 13, 13->53 + 14, 14->54 + 15, 15->55 
-    title: "Generic upgrades",
-    description: "Unlocks more upgrades, raises point gain by 1.01",
-    cost: new Decimal(8),
-    unlocked() {
-      return hasUpgrade("d", 32)
-      },
-    },
-    43: { // 11->51 + 12, 12->52 + 13, 13->53 + 14, 14->54 + 15, 15->55 
-    title: "Generic upgrades",
-    description: "Unlocks more upgrades, raises point gain by 1.01",
-    cost: new Decimal(9),
-    unlocked() {
-      return hasUpgrade("d", 33)
-      },
-    },
-    44: { // 11->51 + 12, 12->52 + 13, 13->53 + 14, 14->54 + 15, 15->55 
-    title: "Generic upgrades",
-    description: "Unlocks more upgrades, raises point gain by 1.01",
-    cost: Decimal.dTen,
-    unlocked() {
-      return hasUpgrade("d", 34)
-      },
-    },
-    45: { // 11->51 + 12, 12->52 + 13, 13->53 + 14, 14->54 + 15, 15->55 
-    title: "Generic upgrades",
-    description: "Unlocks more upgrades, raises point gain by 1.01",
-    cost: new Decimal(11),
-    unlocked() {
-      return hasUpgrade("d", 35)
-      },
-    },
-    51: { // 11->51 + 12, 12->52 + 13, 13->53 + 14, 14->54 + 15, 15->55 
-    title: "Generic upgrades",
-    description: "Unlocks more upgrades, raises point gain by 1.01",
-    cost: new Decimal(8),
-    unlocked() {
-      return hasUpgrade("d", 41)
-      },
-    },
-    52: { // 11->51 + 12, 12->52 + 13, 13->53 + 14, 14->54 + 15, 15->55 
-    title: "Generic upgrades",
-    description: "Unlocks more upgrades, raises point gain by 1.01",
-    cost: new Decimal(9),
-    unlocked() {
-      return hasUpgrade("d", 42)
-      },
-    },
-    53: { // 11->51 + 12, 12->52 + 13, 13->53 + 14, 14->54 + 15, 15->55 
-    title: "Generic upgrades",
-    description: "Unlocks more upgrades, raises point gain by 1.01",
-    cost: Decimal.dTen,
-    unlocked() {
-      return hasUpgrade("d", 43)
-      },
-    },
-    54: { // 11->51 + 12, 12->52 + 13, 13->53 + 14, 14->54 + 15, 15->55 
-    title: "Generic upgrades",
-    description: "Unlocks more upgrades, raises point gain by 1.01",
-    cost: new Decimal(11),
-    unlocked() {
-      return hasUpgrade("d", 44)
-      },
-    },
-    55: { // 11->51 + 12, 12->52 + 13, 13->53 + 14, 14->54 + 15, 15->55 
-    title: "Generic upgrades",
-    description: "Raises point gain by 1.01",
-    cost: new Decimal(12),
-    unlocked() {
-      return hasUpgrade("d", 45)
-      },
-    },
+    }
    },
 	effect() {
     return Decimal.pow(hasMilestone("d",1) ? 0.85 : 0.8, player.d.points)
@@ -509,4 +333,117 @@ addLayer("d", {
     "upgrades",
 		
   ]
+})
+
+addLayer("m", {
+  universe: 0,
+  name: "Minigame",
+  symbol: "M",
+  row: "side",
+  color: "#FF0000",
+  type: "none",
+  position: 1, // this is position, not row
+  layerShown() {
+    return player.u.universe === 1 && hasUpgrade("d", 13)
+  },
+  startData() {
+    return {
+      proc: Decimal.dZero,
+      skillView: ""
+    }
+  },
+  procGain() {
+    return Decimal.dOne
+  },
+  tooltip() {
+    return "Nothing for now..."
+  },
+  update(diff) {
+    if (hasUpgrade("d", 11)) player.m.proc = player.m.proc.plus(tmp.m.procGain.mul(diff))
+  },
+  buyables: {
+    11: {
+      title: "Lazy bone employee",
+      cost(x) {
+        return Decimal.add(x, 1).mul(100) 
+      },
+      effect(x) {
+        return Decimal.mul(x, 10)
+      },
+      display() {
+        return `Not really much of a worker, but hey, you gotta start somewhere!<br>You have <span class="uni">${format(player.m.buyables[11])}</span> lazy bone employees.<br>Cost for next one: $${format(tmp.m.buyables[11].cost)}.<br> Currently makes $${tmp.m.buyables[11].effect} a second.`
+      },
+      canAfford() {
+        return player.r.money.gte(tmp.m.buyables[11].cost)
+      },
+      buy() {
+        const cost = tmp.m.buyables[11].cost
+        addBuyables("m", 11, 1)
+        player.r.money = player.r.money.sub(cost)
+      },
+      unlocked() {
+        return hasUpgrade("m", 12) && !hasUpgrade("m", 13)
+      }
+    }
+  },
+  upgrades: {
+    11: {
+      title: "Start",
+      description: "Create a business. You don't know what you will be doing though... Also generates procrasination.",
+      cost: new Decimal(1000),
+      currencyDisplayName: "$",
+      currencyInternalName: "money",
+      currencyLayer: "r"
+    },
+    12: {
+      title: "Do something!",
+      description() {
+        return hasUpgrade("m", 12) ? "Maybe I should make <b>[REDACTED]</b>. Anyway time to get the boring stuff done... (unlocks employees)" : "Hmm... what should I do?"
+      },
+      cost: new Decimal(10),
+      currencyDisplayName: "procrasination",
+      currencyInternalName: "proc",
+      currencyLayer: "m",
+      unlocked() {
+        return hasUpgrade("m", 11)
+      }
+    },
+    13: {
+      title() {
+       return hasUpgrade('m', 13) ? "Maybe we aren't going to live in a purely incremental world?" : "Realism" 
+      },
+      description() {
+        return hasUpgrade("m", 13) ? "Unlocks skills and specialization." : "What the hell is this? Why do my employees only get a one-time check? Why do they get more expensive every time I hire one? And why do they not do anything else? Is this some fairy tale land? Anyway, i'm gonna fire all employees, make sure they do something new, and actually read up on employee training."
+      },
+      cost: new Decimal(10000),
+      currencyDisplayName: "$",
+      currencyInternalName: "money",
+      currencyLayer: "r",
+      unlocked() {
+        return player.m.buyables[11].gte(10) || player.m.upgrades.includes(13)
+      },
+      onPurchase() {
+        player.m.buyables[11] = Decimal.dZero
+      }
+    }
+  },
+  tabFormat: {
+    "Main": {
+    content: [["display-text", () => `You have $${format(player.r.money)} (+${format(tmp.r.moneyGain)}/s) (from reputation layer in u2).`], 
+    ["display-text", () => hasUpgrade("m", 11) ? `You have ${format(player.m.proc)} (+${format(tmp.m.procGain)}/s) procrasination.` : ""],
+    "upgrades",
+    "buyables"]
+    },
+    "Skills": {
+      content: [
+      ["raw-html", `
+      <div>
+        nothing for now
+      </div>
+      `]],
+        unlocked() {
+          return hasUpgrade("m", 13)
+        }
+    }
+  }
 })
