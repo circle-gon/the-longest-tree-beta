@@ -41,15 +41,15 @@ function getStartPlayer() {
 		}
     
 		if (layers[layer].microtabs) {
-			if (playerdata.subtabs[layer] === undefined) playerdata.subtabs[layer] = {};
-			for (const item in layers[layer].microtabs) playerdata.subtabs[layer][item] = Object.keys(layers[layer].microtabs[item])[0];
+			if (playerdata.subtabs[layer] === undefined) playerData.subtabs[layer] = {};
+			for (const item in layers[layer].microtabs) playerData.subtabs[layer][item] = Object.keys(layers[layer].microtabs[item])[0];
 		}
 		if (layers[layer].infoboxes) {
-			if (playerdata.infoboxes[layer] === undefined) playerdata.infoboxes[layer] = {};
-			for (item in layers[layer].infoboxes) playerdata.infoboxes[layer][item] = false;
+			if (playerData.infoboxes[layer] === undefined) playerData.infoboxes[layer] = {};
+			for (item in layers[layer].infoboxes) playerData.infoboxes[layer][item] = false;
 		}
 	}
-	return playerdata;
+	return playerData;
 }
 
 function getStartLayerData(layer) {
