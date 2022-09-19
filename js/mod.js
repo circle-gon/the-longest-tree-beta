@@ -8,31 +8,31 @@ const modInfo = {
   discordName: "The Longest Tree",
   discordLink: "https://discord.gg/EyyjFVVwTS",
   initialStartPoints: Decimal.dTen, // Used for hard resets and new players
-  offlineLimit: 168,  // In hours
-}
+  offlineLimit: 168  // In hours
+};
 
 // Set your version in num and name
 const VERSION = {
   num: "0.0.1.5 Beta",
-  name: "The Longest Prestige",
-}
+  name: "The Longest Prestige"
+};
 
 const changelog = `<h1>Changelog:</h1><br>
 	<h3>v0.0.1</h3><br>
 		- Added universes, U1, U2, Prestige, Reputation, and Difficulty.<br>
 		- Added upgrades and the Universe Transportation Machine.<br>
-		- Added the Garbage collector and incinerator.`
+		- Added the Garbage collector and incinerator.`;
 
-const winText = "Congratulations! You have reached the end and beaten this game, for now..."
+const winText = "Congratulations! You have reached the end and beaten this game, for now...";
 
 // If you add new functions anywhere inside of a layer, and those functions have an effect when called, add them here.
 // (The ones here are examples, all official functions are already taken care of)
 const doNotCallTheseFunctionsEveryTick = [
 
-]
+];
 
 function getStartPoints() {
-  return modInfo.initialStartPoints
+  return modInfo.initialStartPoints;
 }
 
 // Determines if it should show points/sec
