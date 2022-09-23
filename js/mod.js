@@ -22,7 +22,7 @@ const changelog = `<h1>Changelog:</h1><br>
 		- Added the Bees minigame.<br>
 		- Added helium.<br>
 		- Implemented the rest of the Difficulty upgrades.<br>
-		- Added a few more milestones, prestige upgrades, and reputation upgrades.
+		- Added a few more milestones, prestige upgrades, and reputation upgrades.<br>
 	<h3>v0.0.1</h3><br>
 		- Added universes, U1, U2, Prestige, Reputation, and Difficulty.<br>
 		- Added upgrades and the Universe Transportation Machine.<br>
