@@ -1119,17 +1119,17 @@ addLayer("he", { // literal trolling time
     },
     14: {
       title: "Radioactive Decayer MK.I",
-      description: "Increase point gain by 2.25x",
+      description: "2.25x to point gain",
       cost: new Decimal(250)
     },
     15: {
       title: "Radioactive Decayer MK.II",
-      description: "Increase point gain by 2.33x",
+      description: "2.33x to point gain",
       cost: new Decimal(750)
     },
     16: {
       title: "Radioactive Decayer MK.III",
-      description: "Increase point gain by 2.45x",
+      description: "2.45x to point gain",
       cost: new Decimal(2100)
     },
     21: {
@@ -1139,17 +1139,17 @@ addLayer("he", { // literal trolling time
     },
     22: {
       title: "Radioactive Decayer MK.IV",
-      description: "Increase point gain by 2.66x",
+      description: "2.66x to point gain",
       cost: new Decimal(6000)
     },
     23: {
       title: "Radioactive Decayer MK.V",
-      description: "Increase point gain by 2.85x",
+      description: "2.85x to point gain",
       cost: new Decimal(11000)
     },
     24: {
       title: "Radioactive Decayer MK.VI",
-      description: "Increase point gain by 3.03x",
+      description: "3.03x to point gain",
       cost: new Decimal(21000)
     },
     25: {
