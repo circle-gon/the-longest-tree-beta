@@ -25,18 +25,18 @@ addLayer("r", {
   baseAmount() { return player.points }, // Get the current amount of baseResource
   type: "normal", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
   exponent(){
-		
-		if(hasUpgrade("r",34)){
-			if(hasUpgrade("d",54))return 0.31
-			return 0.2}
-		return 0.05}, // Prestige currency exponent
+		let exp = new Decimal(0.05)
+    if (hasUpgrade("r", 34)) exp = exp.mul(4)
+    if (hasUpgrade("d", 54)) exp = exp.plus(0.11)
+		return exp
+  }, // Prestige currency exponent
   gainMult() { // Calculate the multiplier for main currency from bonuses
     let mult = Decimal.dOne
 		if (hasUpgrade("r", 22)) mult = mult.mul(upgradeEffect("r", 22))
     return mult
   },
   gainExp(){
-		if(hasUpgrade("d",51))return Decimal.pow(1.01, Math.min(13, player.d.upgrades.filter(x=>(x%10<5&&x/10<5&&![22,33,44].includes(x))).length))
+		if(hasUpgrade("d",51))return upgradeEffect("d", 11)
 		return Decimal.dOne},
   row: 0, // Row the layer is in on the tree (0 is the first row)
   hotkeys: [
@@ -88,7 +88,7 @@ addLayer("r", {
     22: {
       title: "%%%%%%%%%%%%%",
       description() {
-        return "Use your wealth to gain more reputation! Currently: x" + format(upgradeEffect(this.layer, this.id))
+        return "Use your wealth to gain more reputation! Currently: x" + format(upgradeEffect(this.layer, this.id)) + (hasUpgrade("d", 52) ? " (set by difficulty upgrade 52)" : "")
       },
 			effect() {
 				if(hasUpgrade("d",52))return 100
@@ -119,17 +119,23 @@ addLayer("r", {
     },
   	33: {
       title: "Fire Energy",
-      description: "Incinerating garbage now boosts points even more.",
+      description: "Raises the incinerating garbage effect by ^1.5.",
       cost: new Decimal(125)
     },
   	34: {
       title: "Reputable Source",
-      description: "Square reputation gain twice before multipliers.",
+      description: "Raise reputation gain to ^4 before any other exp affectors.",
       cost: new Decimal(250)
     },
   	35: {
       title: "Making Life Easier",
       description: "Divide difficulty requirement by sqrt(difficulty+1).",
+      effect() {
+        return player.d.points.plus(Decimal.dOne).sqrt()
+      },
+      effectDisplay() {
+        return "/" + format(upgradeEffect("r", 35))
+      },
       cost: new Decimal(969)
     },
 		36: {

@@ -60,7 +60,7 @@ function getPointGen() {
   if (hasUpgrade("p", 14)) gain = gain.times(upgradeEffect("p", 14))
 	if (hasUpgrade("p", 32)) gain=gain.mul(clickableEffect("p", 11))
 	if(hasUpgrade("r",31))gain=gain.mul(2)
-  gain = gain.pow(Decimal.pow(1.01, Math.min(13, player.d.upgrades.filter(x=>(x%10<5&&x/10<5&&![22,33,44].includes(x))).length)))
+  gain = gain.pow(upgradeEffect("d", 11))
   if (player.d.unlocked) gain = gain.pow(tmp.d.effect)
 	// multipliers after this are not affected by powers
 	if(hasUpgrade("d",22))gain=gain.mul(2.2)

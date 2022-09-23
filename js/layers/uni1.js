@@ -24,7 +24,7 @@ addLayer("p", {
   }, // Get the current amount of baseResource
   type: "normal", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
   exponent() {
-    if (player.d.points.lte(3)) return 0.75
+    if (!hasMilestone("d", 1)) return 0.75
     return new Decimal(0.01).add(Decimal.div(0.74, player.d.points.sub(3).div(20).add(Decimal.dOne)))
 
   }, // Prestige currency exponent
@@ -89,7 +89,7 @@ addLayer("p", {
     12: {
       title: "Garbage Incinerator",
       display() {
-        return `Throw some of your extra garbage into this incinerator to get a boost to points!<br>Amount of burned garbage: ${format(getClickableState("p", 12))}<br>Effect: ${format(clickableEffect("p", 12))}x<br>Click to burn ${format(tmp.p.clickables[12].gain)} garbage!`
+        return `Throw some of your extra garbage into this incinerator to get a boost to points!<br>Amount of ash: ${format(getClickableState("p", 12))}<br>Effect: ${format(clickableEffect("p", 12))}x<br>Click to burn ${format(tmp.p.clickables[12].gain)} garbage!`
       },
       unlocked() {
         return hasUpgrade("p", 32)
@@ -113,14 +113,17 @@ addLayer("p", {
     11: {
       title: "Generic upgrade #1",
       description: "Doubles point gain.",
-      cost: Decimal.dOne
+      cost: Decimal.dOne,
+      unlocked() {
+        return !hasUpgrade("d", 25)
+      }
     },
     12: {
       title: "Generic-er upgrade #1.5",
       description: "Doubles point gain, again.",
       cost: Decimal.dTwo,
       unlocked() {
-        return hasUpgrade("p", 11)
+        return hasUpgrade("p", 11) && !hasUpgrade("d", 25)
       }
     },
     13: {
@@ -235,7 +238,7 @@ addLayer("p", {
     },
     32: {
       title: "Incinerator",
-      description: "Allows burning garbage for points.",
+      description: "Allows burning garbage into ash to boost point gain.",
       cost: new Decimal(100000),
       unlocked() {
         return hasUpgrade("p", 31) && (player.d.points.gte(Decimal.dTwo) || hasMilestone("d", 0))
@@ -250,16 +253,16 @@ addLayer("p", {
       },
     },
     34: {
-      title: "Trash Collection Service",
-      description: "Automatically gain trash based on prestige points.",
+      title: "Garbage Collection Service",
+      description: "Automatically gain garbage based on prestige points.",
       cost: new Decimal(1.11e11),
       unlocked() {
         return hasUpgrade("d", 55)
       },
     },
     35: {
-      title: "Trash Burning Service",
-      description: "Automatically burn trash.",
+      title: "Garbage Burning Service",
+      description: "Automatically burn garbage.",
       cost: new Decimal(1e12),
       unlocked() {
         return hasUpgrade("d", 55)
@@ -311,8 +314,9 @@ addLayer("d", {
     }
   },
   color: "#AB9F43",
-  requires(){let r= new Decimal(1e6)
-						if(hasUpgrade("r",35))r=r.div(player.d.points.add(1).sqrt())
+  requires(){
+    let r= new Decimal(1e6)
+						if(hasUpgrade("r",35)) r = r.div(upgradeEffect("r", 35))
 						 return r
 						}, // Can be a function that takes requirement increases into account
   resource: "difficulty points", // Name of prestige currency
@@ -322,8 +326,9 @@ addLayer("d", {
   }, // Get the current amount of baseResource
   type: "static", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
   base(){
-		if(hasUpgrade("d",55))return 10
-		return 1},
+		if(hasUpgrade("d",55)) return 10
+		return 1
+  },
   exponent: 1, // Prestige currency exponent
   gainMult: Decimal.dOne, // Calculate the multiplier for main currency from bonuses
   gainExp: Decimal.dOne, // Calculate the exponent on main currency from bonuses
@@ -341,32 +346,40 @@ addLayer("d", {
   },
   upgrades: {
     11: { // 11->51 + 12, 12->52 + 13, 13->53 + 14, 14->54 + 15, 15->55 
-      title: "Generic upgrades",
-      description: "Unlocks another generic upgrade, raises point gain by 1.01",
+      title: "Generic point upgrade",
+      description() {
+        return `Every upgrade that you buy that is called 'Generic point upgrade' raises point gain ${hasUpgrade("d", 51) ? "and reputation gain" : ""} by 1.01.`
+      },
       cost: new Decimal(4),
       unlocked() {
         return hasUpgrade("p", 32) || hasUpgrade("d", 11)
       },
+      effect() {
+        return Decimal.pow(1.01, player.d.upgrades.filter(i=>tmp.d.upgrades[i].title==="Generic point upgrade").length)
+      },
+      effectDisplay() {
+        return "^" + format(upgradeEffect("d", 11))
+      }
     },
     12: { // 11->51 + 12, 12->52 + 13, 13->53 + 14, 14->54 + 15, 15->55 
-      title: "Generic upgrades",
-      description: "Unlocks another generic upgrade, raises point gain by 1.01",
+      title: "Generic point upgrade",
+      description: "Only exists for 'Generic point upgrade' bonus",
       cost: new Decimal(5),
       unlocked() {
         return hasUpgrade("d", 11)
       },
     },
     13: { // 11->51 + 12, 12->52 + 13, 13->53 + 14, 14->54 + 15, 15->55 
-      title: "Generic upgrades",
-      description: "Unlocks another generic upgrade, raises point gain by 1.01",
+      title: "Generic point upgrade",
+      description: "Nothing special",
       cost: new Decimal(6),
       unlocked() {
         return hasUpgrade("d", 12)
       },
     },
     14: { // 11->51 + 12, 12->52 + 13, 13->53 + 14, 14->54 + 15, 15->55 
-      title: "Generic upgrades",
-      description: "Unlocks another generic upgrade, raises point gain by 1.01",
+      title: "Generic point upgrade",
+      description: "...",
       cost: new Decimal(7),
       unlocked() {
         return hasUpgrade("d", 13)
@@ -381,32 +394,32 @@ addLayer("d", {
       },
     },
     21: { // 11->51 + 12, 12->52 + 13, 13->53 + 14, 14->54 + 15, 15->55 
-      title: "Generic upgrades",
-      description: "Unlocks another generic upgrade, raises point gain by 1.01",
+      title: "Generic point upgrade",
+      description: "...",
       cost: new Decimal(5),
       unlocked() {
         return hasUpgrade("d", 11)
       },
     },
     22: { // 11->51 + 12, 12->52 + 13, 13->53 + 14, 14->54 + 15, 15->55 
-      title: "Generic upgrades",
-      description: "Unlocks another generic upgrade, multiplies point gain by 2.2 after all exponents",
+      title: "Something special?",
+      description: "Multiplies point gain by 2.2 after all exponents",
       cost: new Decimal(6),
       unlocked() {
         return hasUpgrade("d", 12)
       },
     },
     23: { // 11->51 + 12, 12->52 + 13, 13->53 + 14, 14->54 + 15, 15->55 
-      title: "Generic upgrades",
-      description: "Unlocks another generic upgrade, raises point gain by 1.01",
+      title: "Generic point upgrade",
+      description: "...",
       cost: new Decimal(7),
       unlocked() {
         return hasUpgrade("d", 13)
       },
     },
     24: { // 11->51 + 12, 12->52 + 13, 13->53 + 14, 14->54 + 15, 15->55 
-      title: "Generic upgrades",
-      description: "Unlocks another generic upgrade, raises point gain by 1.01",
+      title: "Generic point upgrade",
+      description: "...",
       cost: new Decimal(8),
       unlocked() {
         return hasUpgrade("d", 14)
@@ -421,32 +434,32 @@ addLayer("d", {
       },
     },
     31: { // 11->51 + 12, 12->52 + 13, 13->53 + 14, 14->54 + 15, 15->55 
-      title: "Generic upgrades",
-      description: "Unlocks another generic upgrade, raises point gain by 1.01",
+      title: "Generic point upgrade",
+      description: "You still are reading this!?",
       cost: new Decimal(6),
       unlocked() {
         return hasUpgrade("d", 21)
       },
     },
     32: { // 11->51 + 12, 12->52 + 13, 13->53 + 14, 14->54 + 15, 15->55 
-      title: "Generic upgrades",
-      description: "Unlocks another generic upgrade, raises point gain by 1.01",
+      title: "Generic point upgrade",
+      description: "...",
       cost: new Decimal(7),
       unlocked() {
         return hasUpgrade("d", 22)
       },
     },
     33: { // 11->51 + 12, 12->52 + 13, 13->53 + 14, 14->54 + 15, 15->55 
-      title: "Generic upgrades",
-      description: "Unlocks another generic upgrade, multiplies point gain by 3.3 after all exponents",
+      title: "Something special, again?",
+      description: "Multiplies point gain by 3.3 after all exponents",
       cost: new Decimal(8),
       unlocked() {
         return hasUpgrade("d", 23)
       },
     },
     34: { // 11->51 + 12, 12->52 + 13, 13->53 + 14, 14->54 + 15, 15->55 
-      title: "Generic upgrades",
-      description: "Unlocks another generic upgrade, raises point gain by 1.01",
+      title: "Generic point upgrade",
+      description: "Is this the last one?",
       cost: new Decimal(9),
       unlocked() {
         return hasUpgrade("d", 24)
@@ -461,32 +474,32 @@ addLayer("d", {
       },
     },
     41: { // 11->51 + 12, 12->52 + 13, 13->53 + 14, 14->54 + 15, 15->55 
-      title: "Generic upgrades",
-      description: "Unlocks more upgrades, raises point gain by 1.01",
+      title: "Generic point upgrade",
+      description: "...",
       cost: new Decimal(7),
       unlocked() {
         return hasUpgrade("d", 31)
       },
     },
     42: { // 11->51 + 12, 12->52 + 13, 13->53 + 14, 14->54 + 15, 15->55 
-      title: "Generic upgrades",
-      description: "Unlocks another generic upgrade, raises point gain by 1.01",
+      title: "Generic point upgrade",
+      description: "...",
       cost: new Decimal(8),
       unlocked() {
         return hasUpgrade("d", 32)
       },
     },
     43: { // 11->51 + 12, 12->52 + 13, 13->53 + 14, 14->54 + 15, 15->55 
-      title: "Generic upgrades",
-      description: "Unlocks another generic upgrade, raises point gain by 1.01",
+      title: "Generic point upgrade",
+      description: "... Is this the last one for real?",
       cost: new Decimal(9),
       unlocked() {
         return hasUpgrade("d", 33)
       },
     },
     44: { // 11->51 + 12, 12->52 + 13, 13->53 + 14, 14->54 + 15, 15->55 
-      title: "Generic upgrades",
-      description: "Unlocks another generic upgrade, multiplies point gain by 4.4 after all exponents",
+      title: "Okay this is boring too...",
+      description: "Multiplies point gain by 4.4 after all exponents",
       cost: Decimal.dTen,
       unlocked() {
         return hasUpgrade("d", 34)
@@ -494,15 +507,15 @@ addLayer("d", {
     },
     45: { // 11->51 + 12, 12->52 + 13, 13->53 + 14, 14->54 + 15, 15->55 
       title: "those 12 difficulties",
-      description: "Gain 12 bees every second and point gain ^1.2",
+      description: "Gain 12 more bees every second and point gain ^1.2",
       cost: new Decimal(12),
       unlocked() {
         return hasUpgrade("d", 35)
       },
     },
     51: { // 11->51 + 12, 12->52 + 13, 13->53 + 14, 14->54 + 15, 15->55 
-      title: "Generic upgrades????",
-      description: "Generic upgrades that raise point gain also raise reputation gain",
+      title: "Less generic, I guess...",
+      description: "The generic upgrade boost to point gain also applies to reputation gain.",
       cost: new Decimal(8),
       unlocked() {
         return hasUpgrade("d", 41)
@@ -534,7 +547,7 @@ addLayer("d", {
     },
     55: { // 11->51 + 12, 12->52 + 13, 13->53 + 14, 14->54 + 15, 15->55 
       title: "Anti-Difficulty",
-      description: "Difficulty effect is ^1.05 and /5 (max ^1) instead of ^0.875, but difficulty cost increases by 10x.",
+      description: "Difficulty effect base is 1.05, but its effect is /5 and capped at 1. Difficulty requirement is now x10 per difficulty.",
       cost: new Decimal(20),
       unlocked() {
         return hasUpgrade("d", 45)
@@ -1108,7 +1121,7 @@ addLayer("he", { // literal trolling time
     },
     12: {
       title: "Helium Denser",
-      description: "Increase point gain by 2.1x",
+      description: "2.1x to point gain. Note: all point multipliers from this layer are unaffected by difficulty effect.",
       cost: new Decimal(25)
     },
     13: {
