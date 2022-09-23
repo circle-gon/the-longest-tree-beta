@@ -31,7 +31,7 @@ const colors = {
 		2: "#9d8fbf",
 		3: "#7f5f79",
 		color: "#af77c9",
-		points: "#c8b3ff",
+		points: "#f4f0ff",
 		locked: "#ff94a0",
 		background: "#7134eb", // purpl
 		background_tooltip: "rgba(30, 30, 130, 0.75)",

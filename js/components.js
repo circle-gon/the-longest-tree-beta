@@ -10,7 +10,7 @@ function loadVue() {
 // data = a function returning the content (actually HTML)
 	Vue.component("raw-html", {
 			props: ["layer", "data"],
-			template: `<div class="instant"  v-html="data"></div>`
+			template: `<span class="instant"  v-html="data"></span>`
 		});
 
 	// Blank space, data = optional height in px or pair with width and height in px
@@ -31,7 +31,8 @@ function loadVue() {
 	// Displays an image, data is the URL
 	Vue.component("display-image", {
 		props: ["layer", "data"],
-		template: `<img class="instant" :src="data" :alt="data">`
+		template: `<img class="instant" v-bind:src= "data" v-bind:alt= "data">
+	`
 	})
 		
 	// data = an array of Components to be displayed in a row
@@ -660,6 +661,3 @@ function loadVue() {
 }
 
  
-
-
-

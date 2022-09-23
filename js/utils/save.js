@@ -158,15 +158,20 @@ function fixData(defaultData, newData) {
 
 function load() {
 	const get = localStorage.getItem(modInfo.id);
-	if (!get) {
-		Object.assign(player, getStartPlayer());
-		options = getStartOptions();
-	}
-	else {
+  let hasThrown = false
+  if (get) {
+    try {
 		player = Object.assign(getStartPlayer(), JSON.parse(decodeURIComponent(escape(atob(get)))));
 		fixSave();
 		loadOptions();
-	}
+    } catch(e) {
+      console.error(e)
+      alert("Your save is invalid! You shall start with a new save.")
+      hasThrown = true
+    }
+	} else if (!get || hasThrown) {
+    player = getStartPlayer()
+  }
 
 	if (options.offlineProd) {
 		player.offTime ??= { remain: 0 };
@@ -188,8 +193,7 @@ function load() {
 
 function loadOptions() {
 	const get2 = localStorage.getItem(modInfo.id+"_options");
-	if (get2) options = Object.assign(getStartOptions(), JSON.parse(decodeURIComponent(escape(atob(get2)))));
-	else options = getStartOptions()
+	if (get2) Object.assign(options, JSON.parse(decodeURIComponent(escape(atob(get2)))));
 	if (themes.indexOf(options.theme) < 0) theme = "default"
 	fixData(options, getStartOptions())
 }
@@ -266,7 +270,3 @@ let saveInterval = setInterval(() => {
 	if (tmp.gameEnded && !player.keepGoing) return;
 	if (options.autosave) save();
 }, 5000);
-
-addEventListener("beforeunload", () => {
-  if (player.autosave) save();
-});

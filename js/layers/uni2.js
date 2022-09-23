@@ -14,18 +14,30 @@ addLayer("r", {
     }
   },
   color: "#B423EC",
-  requires: new Decimal(10000), // Can be a function that takes requirement increases into account
+  requires() {
+    let req = new Decimal(10000)
+      
+    //if (player.d.unlocked) req = req.pow(tmp.d.effect)
+    return req
+  },
   resource: "reputation points", // Name of prestige currency
   baseResource: "points", // Name of resource prestige is based on
   baseAmount() { return player.points }, // Get the current amount of baseResource
   type: "normal", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
-  exponent: 0.05, // Prestige currency exponent
+  exponent(){
+		
+		if(hasUpgrade("r",34)){
+			if(hasUpgrade("d",54))return 0.31
+			return 0.2}
+		return 0.05}, // Prestige currency exponent
   gainMult() { // Calculate the multiplier for main currency from bonuses
     let mult = Decimal.dOne
 		if (hasUpgrade("r", 22)) mult = mult.mul(upgradeEffect("r", 22))
     return mult
   },
-  gainExp: Decimal.dOne, // Calculate the exponent on main currency from bonuses
+  gainExp(){
+		if(hasUpgrade("d",51))return Decimal.pow(1.01, Math.min(13, player.d.upgrades.filter(x=>(x%10<5&&x/10<5&&![22,33,44].includes(x))).length))
+		return Decimal.dOne},
   row: 0, // Row the layer is in on the tree (0 is the first row)
   hotkeys: [
     { 
@@ -70,7 +82,7 @@ addLayer("r", {
       description: "Start gaining money based on your reputation.",
       cost: new Decimal(1),
       unlocked() {
-        return hasMilestone("d", 0)
+        return hasMilestone("d", 1)
       }
     },
     22: {
@@ -79,6 +91,7 @@ addLayer("r", {
         return "Use your wealth to gain more reputation! Currently: x" + format(upgradeEffect(this.layer, this.id))
       },
 			effect() {
+				if(hasUpgrade("d",52))return 100
         return player.r.money.pow(0.25)
       }, //just ^0.25
       cost: Decimal.dTwo,
@@ -104,13 +117,33 @@ addLayer("r", {
       description: "Spend your money on more maggots, therefore boosting garbage even more! Raises prestige points to garbage conversation by 1.2.",
       cost: new Decimal(25)
     },
+  	33: {
+      title: "Fire Energy",
+      description: "Incinerating garbage now boosts points even more.",
+      cost: new Decimal(125)
+    },
+  	34: {
+      title: "Reputable Source",
+      description: "Square reputation gain twice before multipliers.",
+      cost: new Decimal(250)
+    },
+  	35: {
+      title: "Making Life Easier",
+      description: "Divide difficulty requirement by sqrt(difficulty+1).",
+      cost: new Decimal(969)
+    },
+		36: {
+      title: "Mega-Reputation",
+      description: "It's time for another layer! Unfortunately you'll have to wait for the next update.",
+      cost: new Decimal(1e6)
+    },
   },
 	update(diff){
 		if (hasUpgrade("r", 21)) player.r.money = player.r.money.add(tmp.r.moneyGain.mul(diff))
 	},
 	moneyGain() {
-		let gain = player.r.points.add(Decimal.dOne).log10().pow(Decimal.dTwo)
-    if (hasUpgrade("m", 12) && !hasUpgrade("m", 13)) gain = gain.add(tmp.m.buyables[11].effect)
+		let gain = player.r.points.add(Decimal.dOne).log10().pow(Decimal.dTwo).div(10)
+    gain = gain.sub(buyableEffect("m", 12).cost)
 		return gain
 	},
   tabFormat: {
@@ -132,7 +165,7 @@ addLayer("r", {
 			content:["main-display",
     "prestige-button",
     "resource-display",
-							 ["row",[["upgrade",31],["upgrade",32]]],
+							 ["row",[["upgrade",31],["upgrade",32],["upgrade",33],["upgrade",34],["upgrade",35],["upgrade",36]]],
 			],
     }
   }

@@ -1,4 +1,5 @@
-let player, needCanvasUpdate = true;
+let player;
+let needCanvasUpdate = true;
 
 // Don't change this
 const TMT_VERSION = {

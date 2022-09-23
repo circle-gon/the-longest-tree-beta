@@ -1,8 +1,8 @@
 * {
 	transition-duration: 0.5s;
 	text-align: center;
-	font-family: "Inconsolata", monospace;
-  text-shadow: 1px 1px #c2c2c280; /* expect delorean to goof around here */
+  font-family: 'Manrope', sans-serif;
+   /*text-shadow: 1px 1px #c2c2c280; expect delorean to goof around here */
 	font-weight: bold;
 	table-align: center;
 	margin: auto;

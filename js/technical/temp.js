@@ -1,100 +1,84 @@
-var tmp = {}
-var temp = tmp // Proxy for tmp
-var funcs = {}
-var NaNalert = false;
+const tmp = temp = {}
+const funcs = {}
+let NaNalert = false;
 
 // Tmp will not call these
-var activeFunctions = [
+const activeFunctions = [
 	"startData", "onPrestige", "doReset", "update", "automate",
 	"buy", "buyMax", "respec", "onPress", "onClick", "onHold", "masterButtonPress",
 	"sellOne", "sellAll", "pay", "actualCostFunction", "actualEffectFunction",
 	"effectDescription", "display", "fullDisplay", "effectDisplay", "rewardDisplay",
 	"tabFormat", "content",
 	"onComplete", "onPurchase", "onEnter", "onExit", "done",
-	"getUnlocked", "getStyle", "getCanClick", "getTitle", "getDisplay"
-]
-
-var noCall = doNotCallTheseFunctionsEveryTick
-for (item in noCall) {
-	activeFunctions.push(noCall[item])
-}
+	"getUnlocked", "getStyle", "getCanClick", "getTitle", "getDisplay",
+  ...doNotCallTheseFunctionsEveryTick
+];
 
 // Add the names of classes to traverse
-var traversableClasses = []
+const traversableClasses = []
+const boolNames = [
+  "unlocked",
+  "deactivated"
+];
 
 function setupTemp() {
-	tmp = {}
-	tmp.pointGen = {}
-	tmp.backgroundStyle = {}
-	tmp.displayThings = []
-	tmp.scrolled = 0
-	tmp.gameEnded = false
-	funcs = {}
+	tmp.pointGen = {};
+	tmp.backgroundStyle = {};
+	tmp.displayThings = [];
+	tmp.scrolled = 0;
+	tmp.gameEnded = false;
 	
-	setupTempData(layers, tmp, funcs)
-	for (layer in layers){
-		tmp[layer].resetGain = {}
-		tmp[layer].nextAt = {}
-		tmp[layer].nextAtDisp = {}
-		tmp[layer].canReset = {}
-		tmp[layer].notify = {}
-		tmp[layer].prestigeNotify = {}
-		tmp[layer].computedNodeStyle = []
-		setupBuyables(layer)
-		tmp[layer].trueGlowColor = []
+	setupTempData(layers, tmp, funcs);
+	for (const layer in layers){
+		tmp[layer].resetGain = {};
+		tmp[layer].nextAt = {};
+		tmp[layer].nextAtDisp = {};
+		tmp[layer].canReset = {};
+		tmp[layer].notify = {};
+		tmp[layer].prestigeNotify = {};
+		tmp[layer].computedNodeStyle = [];
+		setupBuyables(layer);
+		tmp[layer].trueGlowColor = [];
 	}
 
 	tmp.other = {
-		lastPoints: player.points || decimalZero,
-		oomps: decimalZero,
+		lastPoints: player.points ?? Decimal.dZero,
+		oomps: Decimal.dZero,
 		screenWidth: 0,
 		screenHeight: 0,
-    }
-
-	updateWidth()
-
-	temp = tmp
+  };
+	updateWidth();
 }
-
-const boolNames = ["unlocked", "deactivated"]
 
 function setupTempData(layerData, tmpData, funcsData) {
 	for (item in layerData){
-		if (layerData[item] == null) {
-			tmpData[item] = null
-		}
-		else if (layerData[item] instanceof Decimal)
-			tmpData[item] = layerData[item]
+		if (layerData[item] == null) tmpData[item] = null
 		else if (Array.isArray(layerData[item])) {
 			tmpData[item] = []
 			funcsData[item] = []
 			setupTempData(layerData[item], tmpData[item], funcsData[item])
 		}
-		else if ((!!layerData[item]) && (layerData[item].constructor === Object)) {
+		else if (isPlainObject(layerData[item])) {
 			tmpData[item] = {}
 			funcsData[item] = []
 			setupTempData(layerData[item], tmpData[item], funcsData[item])
 		}
-		else if ((!!layerData[item]) && (typeof layerData[item] === "object") && traversableClasses.includes(layerData[item].constructor.name)) {
+		else if (layerData[item] && typeof layerData[item] === "object" && traversableClasses.includes(layerData[item].constructor.name)) {
 			tmpData[item] = new layerData[item].constructor()
 			funcsData[item] = new layerData[item].constructor()
 		}
-		else if (isFunction(layerData[item]) && !activeFunctions.includes(item)){
+		else if (isFunction(layerData[item]) && !activeFunctions.includes(item)) {
 			funcsData[item] = layerData[item]
-			if (boolNames.includes(item))
-				tmpData[item] = false
-			else
-				tmpData[item] = decimalOne // The safest thing to put probably?
-		} else {
-			tmpData[item] = layerData[item]
-		}
+			if (boolNames.includes(item)) tmpData[item] = false
+			else tmpData[item] = Decimal.dOne // The safest thing to put probably?
+		} 
+    else tmpData[item] = layerData[item]
 	}	
 }
 
 
 function updateTemp() {
-	if (tmp === undefined)
-		setupTemp()
+	if (tmp === undefined) setupTemp()
 
 	updateTempData(layers, tmp, funcs)
 
@@ -175,5 +159,5 @@ function setupBuyables(layer) {
 }
 
 function checkDecimalNaN(x) {
-	return (x instanceof Decimal) && !x.eq(x)
+	return x instanceof Decimal && x.neq(x)
 }
